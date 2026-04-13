@@ -99,48 +99,54 @@ ps aux | grep defunct    # Verify no zombies
 
 Two containers (alpha and beta) are started under the supervisor. The `ps` command shows both containers tracked with their PIDs, states, and start timestamps.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 1 & 2](screenshots/ss1_2.png)
+
 *Figure 1: Multi-container supervision and metadata tracking via engine ps*
 
 ### 3.2 Screenshot 3: Bounded-Buffer Logging
 
 The `logs` command retrieves captured stdout from each container through the logging pipeline, demonstrating file-descriptor-based IPC and the bounded-buffer mechanism.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 3](screenshots/ss3.png)
+
 *Figure 2: Bounded-buffer logging — container stdout captured through the logging pipeline*
 
 ### 3.3 Screenshot 4: CLI and IPC (Stop + State Update)
 
 A `stop` command is issued via the CLI. The supervisor receives it through the IPC channel, sends SIGTERM to the container, and updates the metadata to reflect the new state.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 4](screenshots/ss4.png)
+
 *Figure 3: CLI command (stop) reaching supervisor, state updated to "stopped"*
 
 ### 3.4 Screenshot 5: Soft-Limit Warning
 
 The kernel monitor detects that the memtest container (PID 8181) exceeded its configured soft memory limit (8,388,608 bytes). A warning is logged to dmesg.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 5](screenshots/ss5.png)
+
 *Figure 4: Kernel monitor soft-limit warning in dmesg*
 
 ### 3.5 Screenshot 6: Hard-Limit Enforcement
 
 The same container then exceeds the hard memory limit (16,777,216 bytes). The kernel module kills the process and logs the event. The supervisor metadata is updated to reflect the kill.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 6](screenshots/ss6.png)
+
 *Figure 5: Kernel monitor hard-limit kill in dmesg*
 
 ### 3.6 Screenshots 5 & 6 (Part 2): Post-Kill Metadata
 
 After the kernel kills memtest, the supervisor updates the container state. The `ps` command confirms memtest is listed as exited.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 5&6 Part 2](screenshots/ss5_6_part2.png)
+
 *Figure 6: Supervisor metadata reflecting kernel-killed container*
 
 ### 3.7 Screenshot 7: Scheduling Experiment
@@ -149,22 +155,25 @@ Two runs of `cpu_hog` with different nice values demonstrate the effect of sched
 
 #### 3.7.1 Normal Priority (nice 0)
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 7a](screenshots/ss7a.png)
+
 *Figure 7a: cpu_hog at default priority — real 0m14.505s*
 
 #### 3.7.2 Lower Priority (nice +10)
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 7b](screenshots/ss7b.png)
+
 *Figure 7b: cpu_hog at nice +10 — real 0m14.659s*
 
 ### 3.8 Screenshot 8: Clean Teardown
 
 After stopping all containers, `ps aux | grep defunct` confirms no zombie processes remain. The only defunct entry is `sd_espeak-ng-mb`, a system speech-dispatcher process unrelated to our containers.
 
-<!-- Replace with your screenshot -->
+
 ![Screenshot 8](screenshots/ss8.png)
+
 *Figure 8: Clean teardown — no zombie processes from container runtime*
 
 ---
